@@ -9,6 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @Transactional
 public class AccountServiceImpl implements AccountService {
@@ -20,46 +22,47 @@ public class AccountServiceImpl implements AccountService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public AccountServiceImpl(AppUserRepository appUserRepository, AppRoleRepository appRoleRepository,
-	    BCryptPasswordEncoder bCryptPasswordEncoder) {
-	super();
-	this.appUserRepository = appUserRepository;
-	this.appRoleRepository = appRoleRepository;
-	this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+                              BCryptPasswordEncoder bCryptPasswordEncoder) {
+        super();
+        this.appUserRepository = appUserRepository;
+        this.appRoleRepository = appRoleRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
-    public AppUser saveUser(String username, String password, String confirmedPassword) {
-	AppUser user = this.appUserRepository.findByUsername(username);
-	if (user != null)
-	    throw new RuntimeException("Utilisateur Existe Déjà");
-	if (!password.equals(confirmedPassword))
-	    throw new RuntimeException("Please confirm your password");
-	AppUser appUser = new AppUser();
-	appUser.setUsername(username);
-	appUser.setActivated(true);
-	appUser.setPassword(this.bCryptPasswordEncoder.encode(password));
-	this.appUserRepository.save(appUser);
-	addRoleToUser(username, "USER");
-	return user;
+    public AppUser saveUser(String username, String password, String confirmedPassword, UUID id_fonctionel) {
+        AppUser user = this.appUserRepository.findByUsername(username);
+        if (user != null)
+            throw new RuntimeException("Utilisateur Existe Déjà");
+        if (!password.equals(confirmedPassword))
+            throw new RuntimeException("Please confirm your password");
+        AppUser appUser = new AppUser();
+        appUser.setUsername(username);
+        appUser.setActivated(true);
+        appUser.setPassword(this.bCryptPasswordEncoder.encode(password));
+        appUser.setIdFonctionnel(id_fonctionel);
+        user = this.appUserRepository.save(appUser);
+        addRoleToUser(username, "USER");
+        return user;
     }
 
     @Override
     public AppRole saveRole(AppRole role) {
-	return this.appRoleRepository.save(role);
+        return this.appRoleRepository.save(role);
 
     }
 
     @Override
     public AppUser loadUserByUsername(String username) {
 
-	return this.appUserRepository.findByUsername(username);
+        return this.appUserRepository.findByUsername(username);
     }
 
     @Override
     public void addRoleToUser(String username, String rolename) {
-	AppUser appUser = appUserRepository.findByUsername(username);
-	AppRole appRole = appRoleRepository.findByRoleName(rolename);
-	appUser.getRoles().add(appRole);
+        AppUser appUser = appUserRepository.findByUsername(username);
+        AppRole appRole = appRoleRepository.findByRoleName(rolename);
+        appUser.getRoles().add(appRole);
     }
 
 }

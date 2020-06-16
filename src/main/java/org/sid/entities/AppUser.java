@@ -2,6 +2,7 @@ package org.sid.entities;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,6 +28,8 @@ public class AppUser {
 	private String username;
 	@JsonProperty(access=JsonProperty.Access.WRITE_ONLY)
 	private String password;
+	@Column(name = "id_fonctionnel")
+	private UUID idFonctionnel;
 	private boolean activated;
 	@ManyToMany(fetch=FetchType.EAGER)
 	private Collection<AppRole> roles=new ArrayList<>();

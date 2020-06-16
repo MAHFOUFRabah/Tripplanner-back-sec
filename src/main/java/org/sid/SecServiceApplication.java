@@ -1,8 +1,10 @@
 package org.sid;
 
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import org.sid.entities.AppRole;
+import org.sid.entities.AppUser;
 import org.sid.service.AccountService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -23,7 +25,8 @@ public class SecServiceApplication {
 			accountService.saveRole(new AppRole(null,"USER"));
 			accountService.saveRole(new AppRole(null,"ADMIN"));
 			Stream.of("user1","user2","user3","admin").forEach(un->{
-				accountService.saveUser(un,"1234","1234");
+				AppUser appUser = accountService.saveUser(un,"1234","1234", UUID.randomUUID());
+
 			});
 			accountService.addRoleToUser("admin", "ADMIN");
 		};
