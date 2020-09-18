@@ -5,22 +5,20 @@ import io.aperofy.entities.application.EventEntity;
 import io.aperofy.utils.FunctionsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
 
 @Service
-@Transactional
 public class FunctionsUtilsImpl implements FunctionsUtils {
     @Autowired
     EventRepository eventRepository;
 
     @Override
-    public String generateTripCode() {
+    public String generateEventCode() {
         String generatedString = generateRandomString();
         EventEntity eventData = this.eventRepository.findByEventCode(generatedString);
         if (eventData != null) {
-            generateTripCode();
+            generateEventCode();
         }
         return generatedString;
 

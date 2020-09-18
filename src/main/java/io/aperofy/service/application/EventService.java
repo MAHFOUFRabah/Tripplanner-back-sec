@@ -10,7 +10,7 @@ public interface EventService {
 
     EventEntity fetchEventById(Long idEvent);
 
-    void addNewEvent(EventEntity eventToAdd, String username);
+    EventEntity addNewEvent(EventEntity eventToAdd, String username);
 
     void deleteEventById(String username, Long idVoyage);
 

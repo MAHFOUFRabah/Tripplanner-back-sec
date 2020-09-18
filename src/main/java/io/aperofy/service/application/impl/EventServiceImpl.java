@@ -5,6 +5,7 @@ import io.aperofy.dao.security.UserRepository;
 import io.aperofy.entities.application.EventEntity;
 import io.aperofy.entities.security.AppUser;
 import io.aperofy.service.application.EventService;
+import io.aperofy.utils.FunctionsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +20,15 @@ public class EventServiceImpl implements EventService {
     UserRepository userRepository;
     @Autowired
     EventRepository eventRepository;
+    @Autowired
+    FunctionsUtils functionsUtils;
 
     @Override
     public Set<EventEntity> fetchALlEventsOfUser(String username) {
         AppUser appUser = getAppUserFromDb(username);
-        return appUser.getEventEntities();
+        Set<EventEntity> allEventOfTheUser = appUser.getEventEntities();
+        allEventOfTheUser.forEach(event -> event.getItems().clear());
+        return  allEventOfTheUser;
 
     }
 
@@ -38,10 +43,13 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void addNewEvent(EventEntity eventToAdd, String username) {
+    public EventEntity addNewEvent(EventEntity eventToAdd, String username) {
         AppUser user = getAppUserFromDb(username);
+        String eventCode = functionsUtils.generateEventCode();
+        eventToAdd.setEventCode(eventCode);
         user.getEventEntities().add(eventToAdd);
          userRepository.save(user);
+        return  eventRepository.findByEventCode(eventCode);
 
 
     }

@@ -29,7 +29,7 @@ public class SecServiceApplication {
     CommandLineRunner start(AccountService accountService, FunctionsUtils functionsUtils, EventService eventService, UserRepository userRepository, ItemService itemService) {
         return args -> {
 
-
+/*
             accountService.saveRole(new AppRole(null, "USER"));
             accountService.saveRole(new AppRole(null, "ADMIN"));
             Stream.of("user1", "user2", "user3", "admin").forEach(un -> {
@@ -38,7 +38,7 @@ public class SecServiceApplication {
             });
             accountService.addRoleToUser("admin", "ADMIN");
 
-            String generatedCodeValue = functionsUtils.generateTripCode();
+            String generatedCodeValue = functionsUtils.generateEventCode();
             EventEntity eventEntity = new EventEntity();
             eventEntity.setEventCode(generatedCodeValue);
             eventEntity.setTitleEvent("Bordeaux");
@@ -73,7 +73,7 @@ public class SecServiceApplication {
             userData = accountService.loadUserByUsername("user1");
             System.out.println(userData);*/
 
-
+            System.out.println("The App Started");
         };
     }
 
